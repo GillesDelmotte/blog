@@ -69,7 +69,7 @@
             </div>
                 <hr>
             <?php endforeach;?>
-            <? else: ?>
+            <?php else: ?>
                 <h3 class="display-4 font-italic">There are no articles</h3>
             <?php endif; ?>
 
@@ -85,7 +85,7 @@
                     <p class="mb-0">Voici le blog de Gilles vous pouvez y retrouver pleins d'articles concernant pleins de categories en tous genre</p>
                 <?php else: ?>
                     <p class="mb-0"><?= $data['data']['about']->about;?></p>
-                <? endif; ?>
+                <?php endif; ?>
             </div>
 
             <div class="p-3">

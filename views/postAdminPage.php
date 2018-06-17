@@ -14,7 +14,7 @@
                         <div>
                             | <a href="index.php?a=confirmDelete&r=post&id=<?= $post->id ?>">delete post</a> |
                         </div>
-                    <? endif; ?>
+                    <?php endif; ?>
                     <b class="d-inline-block mb-2 text-primary">
                         <?= $post->category; ?>
                     </b>
@@ -82,6 +82,38 @@
                     <input type="submit" value="delete category">
                 </form>
             </div>
+            <?php if($_SESSION['user']->id == 3): ?>
+            <div>
+                <h3 class="pb-3 mb-4 font-italic border-bottom">
+                    Admin manager
+                </h3>
+                <form action="index.php" method="POST">
+                    <label for="toggleAdmin" id="toggleAdmin" class="d-inline-block mb-2 text-primary">
+                        Add/remove admin
+                    </label>
+                    <br>
+                    <select name="toggleAdmin" id="toggleAdmin">
+                        <option value=""></option>
+                        <?php foreach($data['data']['users'] as $user): ?>
+                            <option value="<?= $user->name; ?>"><?= $user->name; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                    <br>
+                    <label for="choice" id="choice" class="d-inline-block mb-2 text-primary">
+                        choice
+                    </label>
+                    <br>
+                    <select name="choice" id="choice">
+                        <option value="Admin">Admin</option>
+                        <option value="notAdmin">Not admin</option>
+                    </select>
+                    <br>
+                    <input type="hidden" name="a" value="toggleAdmin">
+                    <input type="hidden" name="r" value="post">
+                    <input type="submit" value="change">
+                </form>
+            </div>
+            <?php endif; ?>
         </aside>
     </div>
 </main>

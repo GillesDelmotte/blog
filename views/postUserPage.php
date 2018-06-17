@@ -9,7 +9,7 @@
                 <a href="index.php?a=edit&r=post&id=<?= $post->id?>">modify post</a> |
                 <a href="index.php?a=confirmDelete&r=post&id=<?= $post->id?>">delete post</a>
             </div>
-        <? endif; ?>
+        <?php endif; ?>
         <b class="d-inline-block mb-2 text-primary">
             <?= $post->category; ?>
         </b>

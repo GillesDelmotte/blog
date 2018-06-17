@@ -24,6 +24,8 @@ class PostController extends Controller
         $posts = $this->postModel->all();
         $articles = [];
 
+
+
         if(!empty($posts)){
             for ($i = 0; $i < 3; $i++) {
                 $article = $posts[rand(0, count($posts) - 1)];
@@ -285,7 +287,6 @@ class PostController extends Controller
     function adminPage()
     {
 
-        $categories = $this->postModel->categories();
         $this->authcheck();
         if(!$_SESSION['user']->id === '3'){
             header('location:index.php?a=index&r=post');
@@ -293,12 +294,16 @@ class PostController extends Controller
 
 
         $posts = $this->postModel->all();
+        $categories = $this->postModel->categories();
+        $users = $this->postModel->getusers();
+
 
         return [
           'view' => 'postAdminPage.php',
           'data' => [
               'posts' => $posts,
-              'categories' => $categories
+              'categories' => $categories,
+              'users' => $users
     ]
         ];
     }
@@ -337,6 +342,20 @@ class PostController extends Controller
 
         header('Location: index.php?a=adminPage&r=post');
         exit;
+    }
+
+    function toggleAdmin(){
+        $this->authCheck();
+
+        $name = $_POST['toggleAdmin'];
+        $choice = $_POST['choice'];
+
+        $this->postModel->toggleAdmin($choice, $name);
+
+
+        header('Location: index.php?a=adminPage&r=post');
+        exit;
+
     }
 
 

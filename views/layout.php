@@ -32,7 +32,7 @@
                         <a class="btn btn-sm btn-outline-secondary" href="index.php?a=userPage&r=post">
                             <?= $_SESSION['user']->name; ?>'s page
                         </a>
-                    <?php if($_SESSION['user']->id == 3): ?>
+                    <?php if($_SESSION['user']->admin == 'Admin'): ?>
                             <a class="btn btn-sm btn-outline-secondary" href="index.php?a=adminPage&r=post">
                                 admin
                             </a>

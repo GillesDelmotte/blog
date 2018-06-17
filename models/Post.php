@@ -8,7 +8,7 @@ class Post extends Model
     function all()
     {
         $cx = $this->getConnectionToDb();
-        $sql = 'SELECT * FROM blogboot.posts ORDER BY date DESC';
+        $sql = 'SELECT * FROM posts ORDER BY date DESC';
         $pst = $cx->query($sql);
         return $pst->fetchAll();
 
@@ -16,7 +16,7 @@ class Post extends Model
 
     function categories(){
         $cx = $this->getConnectionToDb();
-        $sql = 'SELECT * FROM blogboot.category';
+        $sql = 'SELECT * FROM category';
         $pst = $cx->query($sql);
         return $pst->fetchAll();
 
@@ -25,7 +25,7 @@ class Post extends Model
     function getCategoryPosts($cat)
     {
         $cx = $this->getConnectionToDb();
-        $sql = 'SELECT * FROM blogboot.posts WHERE category = :category ORDER BY date DESC';
+        $sql = 'SELECT * FROM posts WHERE category = :category ORDER BY date DESC';
         $pst = $cx->prepare($sql);
         $pst->execute([':category' => $cat]);
         return $pst->fetchAll();
@@ -33,7 +33,7 @@ class Post extends Model
 
     function getAbout($cat){
         $cx = $this->getConnectionToDb();
-        $sql = 'SELECT about FROM blogboot.category WHERE name = :category';
+        $sql = 'SELECT about FROM category WHERE name = :category';
         $pst = $cx->prepare($sql);
         $pst->execute([':category' => $cat]);
         return $pst->fetch();
@@ -41,7 +41,7 @@ class Post extends Model
 
     function getArchives($month, $year){
         $cx = $this->getConnectionToDb();
-        $sql = 'SELECT * FROM blogboot.posts WHERE (SELECT DISTINCT EXTRACT(MONTH FROM date) FROM blogboot.posts) = :month AND (SELECT DISTINCT EXTRACT(YEAR FROM date) FROM blogboot.posts) = :year ORDER BY date DESC';
+        $sql = 'SELECT * FROM posts WHERE (SELECT DISTINCT EXTRACT(MONTH FROM date) FROM posts) = :month AND (SELECT DISTINCT EXTRACT(YEAR FROM date) FROM posts) = :year ORDER BY date DESC';
         $pst = $cx->prepare($sql);
         $pst->execute([':month' => $month, ':year' => $year]);
         return $pst->fetchAll();
@@ -50,7 +50,7 @@ class Post extends Model
     function find($id)
     {
         $cx = $this->getConnectionToDb();
-        $sql = 'SELECT * FROM blogboot.posts WHERE id = :id';
+        $sql = 'SELECT * FROM posts WHERE id = :id';
         $pst = $cx->prepare($sql);
         $pst->execute([':id' => $id]);
         return $pst->fetch();
@@ -59,7 +59,7 @@ class Post extends Model
     function storePost($category, $title, $createBy, $desc, $content)
     {
         $cx = $this->getConnectionToDb();
-        $sql = 'INSERT INTO blogboot.posts(`category`,`title`,`date`,`create_by`, `description`, `content`) VALUES(:category, :title, CURRENT_DATE, :create_by, :desc,  :content)';
+        $sql = 'INSERT INTO posts(`category`,`title`,`date`,`create_by`, `description`, `content`) VALUES(:category, :title, CURRENT_DATE, :create_by, :desc,  :content)';
         $pst = $cx->prepare($sql);
         $pst->execute([':category' => $category, ':title' => $title, ':create_by' => $createBy,':desc' => $desc, ':content' => $content]);
         return $cx->lastInsertId();
@@ -68,7 +68,7 @@ class Post extends Model
     function updatePost($id, $category, $title, $desc, $content)
     {
         $cx = $this->getConnectionToDb();
-        $sql = 'UPDATE blogboot.posts SET category = :category, title = :title, content = :content, description = :desc WHERE id = :id';
+        $sql = 'UPDATE posts SET category = :category, title = :title, content = :content, description = :desc WHERE id = :id';
         $pst = $cx->prepare($sql);
         $pst->execute([':category' => $category, ':title' => $title, ':content' => $content,':desc' => $desc , ':id' => $id]);
     }
@@ -76,7 +76,7 @@ class Post extends Model
     function deletePost($id)
     {
         $cx = $this->getConnectionToDb();
-        $sql = 'DELETE FROM blogboot.posts WHERE id = :id';
+        $sql = 'DELETE FROM posts WHERE id = :id';
         $pst = $cx->prepare($sql);
         $pst->execute([':id' => $id]);
 
@@ -85,7 +85,7 @@ class Post extends Model
 
     function getUserPosts($user){
         $cx = $this->getConnectionToDb();
-        $sql = 'SELECT * FROM blogboot.posts WHERE create_by = :user';
+        $sql = 'SELECT * FROM posts WHERE create_by = :user';
         $pst = $cx->prepare($sql);
         $pst->execute([':user' => $user]);
         return $pst->fetchAll();
@@ -94,23 +94,37 @@ class Post extends Model
 
     function removeCat($name){
         $cx = $this->getConnectionToDb();
-        $sql = 'DELETE FROM blogboot.category WHERE name = :name';
+        $sql = 'DELETE FROM category WHERE name = :name';
         $pst = $cx->prepare($sql);
         $pst->execute([':name' => $name]);
     }
 
     function addCat($name){
         $cx = $this->getConnectionToDb();
-        $sql = 'INSERT INTO blogboot.category(`name`) VALUES(:name)';
+        $sql = 'INSERT INTO category(`name`) VALUES(:name)';
         $pst = $cx->prepare($sql);
         $pst->execute([':name' => $name]);
     }
 
     function changeAbout($name, $about){
         $cx = $this->getConnectionToDb();
-        $sql = 'UPDATE blogboot.category SET about = :about WHERE name = :name';
+        $sql = 'UPDATE category SET about = :about WHERE name = :name';
         $pst = $cx->prepare($sql);
         $pst->execute([':about' => $about, ':name' => $name]);
+    }
+
+    function getusers(){
+        $cx = $this->getConnectionToDb();
+        $sql = 'SELECT name FROM users';
+        $pst = $cx->query($sql);
+        return $pst->fetchAll();
+    }
+
+    function toggleAdmin($choice, $name){
+        $cx = $this->getConnectionToDb();
+        $sql = 'UPDATE users SET admin = :choice WHERE name = :name';
+        $pst = $cx->prepare($sql);
+        $pst->execute([':choice' => $choice, ':name' => $name]);
     }
 
     function nukePosts()

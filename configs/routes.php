@@ -23,6 +23,7 @@ return [
     'removeCategory' => 'POST/removeCat/post',
     'addCategory' => 'POST/addCat/post',
     'changeAbout' => 'POST/changeAbout/post',
+    'toggleAdmin' => 'POST/toggleAdmin/post',
     'endOfTheWorld' =>'POST/nuke/post'
 
 
